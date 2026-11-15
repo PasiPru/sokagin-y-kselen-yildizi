@@ -207,14 +207,21 @@ h1,h2,h3,p { margin-top: 0; }
 .mobile-pitch { display: none; }
 .mobile-tactic-bar { display: none; }
 .match-meta { display: flex; justify-content: center; gap: 18px; margin-top: 16px; color: #899385; font-size: 9px; }
-.match-event { padding: 15px; border-radius: 11px; border: 1px solid #514932; background: linear-gradient(120deg,#302b20,#252525); }
-.match-event h3 { margin: 0 0 7px; color: #f2c77f; font: 600 14px "Space Grotesk",sans-serif; }
-.match-event p { margin: 0; color: #a8aa98; font-size: 10px; line-height: 1.6; }
+.match-event { position: relative; overflow: hidden; padding: 17px; border-radius: 11px; border: 1px solid #356747; background: radial-gradient(ellipse at 92% 0%,#45c96b22,transparent 42%),linear-gradient(125deg,#17291d,#1e1e1e 72%); box-shadow: inset 0 1px #b4ffc21a,0 10px 24px #0005; }
+.match-context { margin: 0 0 8px; color: #83eda0; font: 700 9px "Space Grotesk",sans-serif; letter-spacing: .8px; }
+.match-event h3 { margin: 0 0 7px; color: #d7ffe0; font: 700 16px "Space Grotesk",sans-serif; }
+.match-event p { margin: 0; color: #b7c9b9; font-size: 11px; line-height: 1.6; }
 .choice-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 8px; margin-top: 12px; }
 .choice-button { padding: 11px; border: 1px solid #464638; border-radius: 8px; background: #25271f; cursor: pointer; text-align: left; font-size: 10px; }
 .choice-button:hover { border-color: var(--accent); }
 .choice-button strong { display: block; margin-bottom: 4px; color: #e7eadf; font-size: 10px; }
 .choice-button small { color: #949989; font-size: 8px; line-height: 1.4; }
+.match-event .choice-grid { gap: 10px; margin-top: 16px; }
+.match-event .choice-button { min-height: 64px; padding: 13px; border: 1px solid #3c7350; background: linear-gradient(145deg,#244b30,#1b3222); box-shadow: inset 0 1px #c8ffd51c; transition: transform .16s ease,border-color .16s ease,background .16s ease,box-shadow .16s ease; }
+.match-event .choice-button strong { color: #e1ffe8; font-size: 12px; }
+.match-event .choice-button small { color: #a8c8ae; font-size: 9px; }
+.match-event .choice-button:hover { transform: translateY(-1px); border-color: #83f0a0; background: linear-gradient(145deg,#2c6540,#21442d); box-shadow: 0 0 0 1px #83f0a044,0 8px 20px #35ce6925; }
+.match-event .choice-button:focus-visible { outline: 2px solid #83f0a0; outline-offset: 2px; }
 .match-score-summary { text-align: center; padding: 20px; }
 .rating-big { color: var(--accent); font: 700 45px "Space Grotesk",sans-serif; }
 .match-log { display: grid; gap: 9px; }
@@ -450,6 +457,8 @@ html:has(dialog[open]) { overflow: hidden; }
   .score-center strong { font-size: clamp(21px,6vw,25px); }
   .match-meta { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 7px; margin-top: 12px; font-size: 9px; }
   .match-meta span { min-width: 0; overflow-wrap: anywhere; }
+  .match-event .choice-grid { grid-template-columns: 1fr; }
+  .match-event .choice-button { min-height: 58px; }
   .choice-button, .activity-card, .mentality-option { min-height: 48px; }
   .pre-match-actions, .week-action-row, .match-advance-actions { position: sticky; z-index: 8; bottom: calc(var(--mobile-nav-height) + 7px + env(safe-area-inset-bottom)); padding: 8px; border: 1px solid var(--line); border-radius: 12px; background: #1e1e1ef2; box-shadow: 0 8px 24px #0007; backdrop-filter: blur(12px); }
   .pre-match-actions { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); }
@@ -515,7 +524,6 @@ html:has(dialog[open]) { overflow: hidden; }
   .pitch-ball { top: 38%; left: 49%; width: 5px; height: 5px; border-radius: 50%; background: #fff; box-shadow: 0 0 5px #fff; }
   .mobile-pitch small { position: absolute; right: 0; bottom: 1px; left: 0; color: #e6f0df; font-size: 7px; letter-spacing: 1px; text-align: center; }
 }
-
 </style>
 </head>
 <body>
@@ -1166,7 +1174,7 @@ const MATCH_SCENARIOS = {
     { id: "forward-penalty", title: "90. dakikada penaltı", description: "Skor eşit, top beyaz noktada. Tribün sustu, kaleci gözünü senden ayırmıyor.", choices: [{ title: "Köşeye sert vur", description: "Net vuruş · kaleci çıkarabilir", effect: "power" }, { title: "Panenka dene", description: "Efsane olabilirsin · risk yüksek", effect: "panenka" }] },
     { id: "forward-marking", title: "Sert stoper markajı", description: "Stoper bütün maç formandan çekiyor, bir yandan da laf atıyor. Sinirine hakim ol.", choices: [{ title: "Oyuna odaklanıp bileğinle sıyrıl", description: "Temiz çözüm · efor ister", effect: "finish" }, { title: "Hakeme şikayet edip teması al", description: "Faul kazanma şansı · ritim kaybı", effect: "hold" }] },
     { id: "forward-volley", title: "Kalecinin boşalttığı kale", description: "Kanattan orta geldi, kaleci çizgide değil. Top önünde sekiyor.", choices: [{ title: "Gelişine vole vur", description: "Gol olursa tribün ayağa kalkar · isabet zor", effect: "power" }, { title: "Göğsünle indirip garanti oyna", description: "Kontrollü bitiriş · savunma yetişebilir", effect: "finish" }] },
-    { id: "forward-selfish", title: "Bencil mi, takım oyuncusu mu?", description: "Kaleciyle karşı karşıyasın; yanında bomboş koşan arkadaşın da var.", choices: [{ title: "Arkadaşına pası çıkar", description: "Asist fırsatı · şöhret paylaşılır", effect: "pass" }, { title: "Şutunu çek, sorumluluğu al", description: "Kahraman olabilirsin · kaçırırsan baskı artar", effect: "finish" }] },
+    { id: "forward-selfish", title: "Kaleciyle karşı karşıya", description: "{opponent} savunmasının arkasına sarktın. Dakika {minute}, skor {scoreFor}-{scoreAgainst}; kaleciyle karşı karşıyasın ve yanında boş koşan arkadaşın var.", condition: match => match.minute >= 60 && match.minute <= 85, choices: [{ title: "Arkadaşına pası çıkar", description: "Asist fırsatı · şöhret paylaşılır", effect: "pass" }, { title: "Şutunu çek, sorumluluğu al", description: "Kahraman olabilirsin · kaçırırsan baskı artar", effect: "finish" }] },
     { id: "forward-longshot", title: "Kaleci önde yakalandı", description: "Kaleci ceza sahasından uzaklaştı, top ayağında. Uzaklardan denemek için fırsat.", choices: [{ title: "Orta sahadan füze çıkar", description: "Sürpriz gol · yüksek risk", effect: "power" }, { title: "Topu sürüp takımın gelmesini bekle", description: "Daha güvenli atak · savunma yerleşebilir", effect: "pass" }] },
     { id: "forward-mud", title: "Çamurlu zeminde vuruş", description: "Top ayağına geldi ama zemin kaygan. Vururken ayağın kayabilir.", choices: [{ title: "Bekletmeden sert vur", description: "Savunma hazırlıksız · şut kontrolü zor", effect: "power" }, { title: "Topu kontrol edip plase dene", description: "Daha isabetli · stoper yetişebilir", effect: "finish" }] },
     { id: "forward-taunt", title: "Stoperin lafı", description: "Rakip stoper 'daha çocuksun' diye söylenip duruyor. Cevabını sahada ver.", choices: [{ title: "Gül geç, çalımla sıyrıl", description: "Sokak Sihirbazı yeteneğin varsa bire bir bonusu alırsın", effect: "dribble" }, { title: "Tartışmaya girip gözünü korkut", description: "Tribün coşar · hakem kart çıkarabilir", effect: "hold" }] },
@@ -1502,6 +1510,12 @@ function restoreState(parsed) {
     state.match.momentIndex = 0;
     state.match.lastEventMinute = 0;
     state.match.startingEnergy = state.stats.energy;
+  }
+  if (state.match && state.match.phase === "live") {
+    state.match.usedHighlightIds = Array.isArray(state.match.usedHighlightIds) ? state.match.usedHighlightIds : [];
+    if (state.match.highlight && state.match.highlight.id && !state.match.usedHighlightIds.includes(state.match.highlight.id)) {
+      state.match.usedHighlightIds.push(state.match.highlight.id);
+    }
   }
   return true;
 }
@@ -2050,7 +2064,7 @@ function renderMatch() {
   let content = "";
   if (match && match.phase === "live" && match.highlight) {
     const highlight = match.highlight;
-    content = `${mentalityPanel}<div class="panel match-event"><div class="eyebrow">${highlight.minute}. DAKİKA · KRİTİK AN ${match.moments ? `· ${match.momentIndex + 1} / ${match.moments.length}` : ""}</div><h3>${escapeHtml(highlight.title)}</h3><p>${escapeHtml(highlight.description)}</p><div class="choice-grid">${highlight.choices.map((choice, index) => `<button class="choice-button" data-match-choice="${index}"><strong>${escapeHtml(choice.title)}</strong><small>${escapeHtml(choice.description)}</small></button>`).join("")}</div></div>`;
+    content = `${mentalityPanel}<div class="panel match-event"><div class="eyebrow">${highlight.minute}. DAKİKA · KRİTİK AN ${match.moments ? `· ${match.momentIndex + 1} / ${match.moments.length}` : ""}</div><div class="match-context">SKOR ${match.scoreFor}-${match.scoreAgainst} · RAKİP ${escapeHtml(teamLabel(match.opponent))}</div><h3>${escapeHtml(highlight.title)}</h3><p>${escapeHtml(highlight.description)}</p><div class="choice-grid">${highlight.choices.map((choice, index) => `<button class="choice-button" data-match-choice="${index}"><strong>${escapeHtml(choice.title)}</strong><small>${escapeHtml(choice.description)}</small></button>`).join("")}</div></div>`;
   } else if (match && match.phase === "final") {
     content = `${pressPanel}<div class="panel match-score-summary"><div class="eyebrow">HAFTA ${state.week} · MAÇ RAPORU</div><div class="rating-big">${match.rating.toFixed(1)}</div><p class="subtle">Maç reytingin · ${match.goals} gol · ${match.assists} asist</p><p><strong>${escapeHtml(match.outcome)}</strong></p><p class="rating-note">Gol reytinge +0,6 · Asist +0,3 · Performans, mevki, yorgunluk ve sonucu da hesaba katıldı.</p></div>
       <div class="panel" style="margin-top:12px"><div class="panel-heading"><h2>Maç raporu</h2><span>${match.minute}′</span></div><div class="match-log">${match.log.map(item => `<div class="log-item"><span>${escapeHtml(item.text)}</span><strong>${item.value}</strong></div>`).join("")}</div>
@@ -2667,7 +2681,7 @@ function beginMatch() {
     phase: "live", opponent, scoreFor: 0,
     scoreAgainst: state.mentality === "attack" ? randomInt(0, 2) : ["controlled", "defend"].includes(state.mentality) ? randomInt(0, 1) : randomInt(0, 2),
     minute: 1, goals: 0, assists: 0, log: [], highlight: null, derby, mentality: state.mentality, weather, surface: getOriginSurface(),
-    moments: [], momentIndex: 0, lastEventMinute: 0, startingEnergy: state.stats.energy
+    moments: [], momentIndex: 0, lastEventMinute: 0, startingEnergy: state.stats.energy, usedHighlightIds: []
   };
   const tacticalBonus = state.mentality === "attack" ? 0.16 : state.mentality === "controlled" ? 0.035 : state.mentality === "defend" ? -0.08 : 0;
   const stageBonus = state.careerStage === "amateur" ? 0.06 : state.careerStage === "regional" ? 0.02 : state.careerStage === "international" ? -0.04 : 0;
@@ -2896,21 +2910,44 @@ function completeMatchTimeline() {
   finishMatch();
 }
 function buildHighlight(minute, energy, mentality) {
-  if (energy <= 40) {
-    const scenario = drawMatchScenario(LOW_ENERGY_SCENARIOS);
-    return { ...scenario, minute, title: `Yorgunluk · ${scenario.title}` };
-  }
   const role = mentality === "defend" ? "Defans" : state.position === "Kaleci" ? "Kaleci" : POSITION_ROLES[state.position];
-  const scenarios = MATCH_SCENARIOS[role] || MATCH_SCENARIOS["Hücum"];
-  const scenario = drawMatchScenario(scenarios);
+  const roleScenarios = MATCH_SCENARIOS[role] || MATCH_SCENARIOS["Hücum"];
+  const match = state.match;
+  if (energy <= 40) {
+    const scenario = drawMatchScenario(LOW_ENERGY_SCENARIOS, roleScenarios);
+    return { ...scenario, minute, title: `Yorgunluk · ${scenario.title}`, description: formatMatchScenario(scenario, minute) };
+  }
+  const scenario = drawMatchScenario(roleScenarios);
   const title = energy >= 75 ? `Enerji yüksek · ${scenario.title}` : scenario.title;
-  return { id: scenario.id, minute, title, description: scenario.description, choices: scenario.choices };
+  return { id: scenario.id, minute, title, description: formatMatchScenario(scenario, minute), choices: scenario.choices };
 }
-function drawMatchScenario(scenarios) {
+function formatMatchScenario(scenario, minute) {
+  const match = state.match;
+  const values = {
+    minute,
+    opponent: teamLabel(match.opponent),
+    score: `${match.scoreFor}-${match.scoreAgainst}`,
+    scoreFor: match.scoreFor,
+    scoreAgainst: match.scoreAgainst
+  };
+  const templatePattern = /\{(minute|opponent|score|scoreFor|scoreAgainst)\}/g;
+  const hasTemplate = templatePattern.test(scenario.description);
+  templatePattern.lastIndex = 0;
+  const description = scenario.description.replace(templatePattern, (_, key) => String(values[key]));
+  return hasTemplate ? description : scenario.description;
+}
+function drawMatchScenario(scenarios, fallbackScenarios = []) {
   const recent = Array.isArray(state.recentHighlightIds) ? state.recentHighlightIds : [];
-  const available = scenarios.filter(scenario => !recent.includes(scenario.id));
-  const pool = available.length ? available : scenarios;
+  const used = state.match && Array.isArray(state.match.usedHighlightIds) ? state.match.usedHighlightIds : [];
+  const combined = [...scenarios, ...fallbackScenarios].filter((scenario, index, all) =>
+    all.findIndex(candidate => candidate.id === scenario.id) === index);
+  const eligible = combined.filter(scenario => !scenario.condition || scenario.condition(state.match));
+  const candidates = eligible.length ? eligible : combined.filter(scenario => !scenario.condition);
+  const unused = (candidates.length ? candidates : combined).filter(scenario => !used.includes(scenario.id));
+  const available = unused.filter(scenario => !recent.includes(scenario.id));
+  const pool = available.length ? available : unused.length ? unused : candidates.length ? candidates : combined;
   const scenario = pool[randomInt(0, pool.length - 1)];
+  if (state.match) state.match.usedHighlightIds = [...used, scenario.id];
   state.recentHighlightIds = [...recent, scenario.id].slice(-MAX_RECENT_HIGHLIGHTS);
   return scenario;
 }
@@ -2922,6 +2959,7 @@ function resolveHighlight(index) {
   const boot = state.equipped.boot ? getItem(state.equipped.boot) : null;
   const skillBonus = state.stats.skill / 100;
   let successChance = 0.48 + skillBonus * 0.28 + state.stats.morale / 550 - state.stats.fatigue / 300;
+  if (["finish", "dribble"].includes(choice.effect)) successChance += (state.stats.speed - 50) / 1000;
   successChance += (state.stats.mental - 50) / 400;
   successChance += (state.stats.streetRating - 50) / 600;
   successChance += (state.stats.energy - 50) / 500;
