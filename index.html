@@ -1449,7 +1449,8 @@ function freshState() {
     player: null, page: "dashboard", week: 1, money: 1200, stats: { skill: 35, fatigue: 12, morale: 65, stress: 16, fame: 0, family: 70, chem: 50, energy: 88, mental: 70, speed: 50, streetRating: 15, resilience: 75, form: 72 },
     pro: false, proTier: 0, proMatches: 0, club: "", rival: "", position: "", city: "", originRegion: "turkey", neighborhood: "", streetSurface: "school", streetRule: "", start: "street", careerStage: "amateur", personality: "Mütevazı", streetMatchRisk: false,
     professionalAcademy: false, academyDivision: "U19", firstTeam: false, coachTrust: 48, fanLove: 50, presidentOpinion: 50, mentality: "balanced",
-    leagueKind: null, leagueCountry: "Türkiye", season: 1, fixtures: [], standings: [], transferOffer: null,
+    leagueKind: null, leagueCountry: "Türkiye",
+     season: 1, fixtures: [], standings: [], transferOffer: null,
     pendingPressConference: null, unlockedPerks: [], activePerk: null,
     contract: { salary: 0, goalBonus: 0, releaseClause: 0, negotiations: 0, lastNegotiationWeek: 0, starterGuaranteed: false },
     overall: 0, matches: 0, goals: 0, assists: 0, ratingTotal: 0, stageMatches: 0, stageRatingTotal: 0, lastRating: null, lastResult: "Kariyerin başladı",
@@ -3007,7 +3008,7 @@ function resolveHighlight(index) {
       match.scoreFor++;
       match.log.unshift({ text: `${match.highlight.minute}′ Asist ve gol`, value: "+0,3 asist" });
     } else if (effect === "hold") {
-      match.scoreAgainst = Math.max(0, match.scoreAgainst - 1);
+     
       match.log.unshift({ text: `${match.highlight.minute}′ Oyun soğutuldu`, value: "Topa sahip olma" });
     } else {
       match.scoreAgainst = Math.max(0, match.scoreAgainst - 1);
